@@ -6,13 +6,13 @@ class App extends Component {
     return (
       <div className="simon">
         <div className="sector-line">
-          <div className="sector sector1"></div>
-          <div className="sector sector2"></div>
+          <button className="sector sector1"></button>
+          <button className="sector sector2"></button>
           
         </div>
         <div className="sector-line">
-          <div className="sector sector3"></div>
-          <div className="sector sector4"></div>
+          <button className="sector sector3"></button>
+          <button className="sector sector4"></button>
         </div>
         <div className="panel">
           <h3 className="game-caption">SIMON</h3>
