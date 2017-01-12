@@ -1,18 +1,24 @@
 import React, {Component} from 'react';
+
+import NoteBtn from './components/noteBtn'
+
 import './App.css';
 
 class App extends Component {
+
   render() {
+    const audio = new Audio('https://s3.amazonaws.com/freecodecamp/simonSound1.mp3');
+    audio.play();
     return (
       <div className="simon">
         <div className="sector-line">
-          <button className="sector sector1"></button>
-          <button className="sector sector2"></button>
+          <NoteBtn id={"1"}/>
+          <NoteBtn id={"2"}/>
           
         </div>
         <div className="sector-line">
-          <button className="sector sector3"></button>
-          <button className="sector sector4"></button>
+          <NoteBtn id={"3"}/>
+          <NoteBtn id={"4"}/>
         </div>
         <div className="panel">
           <h3 className="game-caption">SIMON</h3>
