@@ -1,5 +1,4 @@
 import React, {Component} from 'react';
-
 import NoteBtn from './components/noteBtn'
 
 import './App.css';
@@ -7,8 +6,7 @@ import './App.css';
 class App extends Component {
 
   render() {
-    const audio = new Audio('https://s3.amazonaws.com/freecodecamp/simonSound1.mp3');
-    audio.play();
+    
     return (
       <div className="simon">
         <div className="sector-line">
