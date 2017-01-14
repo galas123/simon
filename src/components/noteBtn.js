@@ -1,12 +1,12 @@
 import React, {
   Component
 } from 'react';
-import cx from 'classnames';
+
 import {connect} from 'react-redux';
 
 import {clickNote} from '../AC/clickNote';
 
-export default class clickNoteBtn extends Component {
+class clickNoteBtn extends Component {
   render() {
     const {id}=this.props;
     return (
@@ -18,15 +18,10 @@ export default class clickNoteBtn extends Component {
   }
 
   clickBtn = (ev) => {
-    const {clickNote}=this.props;
+    const {clickNote, id}=this.props;
     ev.preventDefault();
     clickNote(id);
   }
 }
 
-const mapStateToProps = state=>({
-  turn       : state.game.turn,
-  sounds       : state.game.sounds,
-});
-
-export default connect(mapStateToProps, {clickNote})(clickNoteBtn);
+export default connect(null, {clickNote})(clickNoteBtn);
