@@ -19,32 +19,33 @@ export default (game = defaultState, action) => {
       console.log('game',game, );
       playSoundtrack(payload);
       if (game.getIn(['randomNotes', game.get('currentStep')])==payload){
-        console.log('нажата правильная нота');
-        let newState = game.set('currentStep', game.get('currentStep')+1);
-        debugger;
-        if (newState.get('currentStep')===newState.get('noteCount')){
+        console.log('нажата правильная нота',game.set('currentStep',0 ));
+        const step=Number(game.get('currentStep'))+1;
+        const countNotes=Number(game.get('noteCount'))
+        let newState = game.set('currentStep',step );
+        if (step === countNotes){
           let answerTime=newState.get('answerTimer');
           if (answerTime){
             clearTimeout(answerTime);
-            let newState = newState.set('answerTimer', null);
+            newState = newState.set('answerTimer', null);
           } //удалить id таймаута перед нажатием очередной ноты
 
-          let newState=nextTurn(newState);
+           newState=nextTurn(newState);
+          console.log ('переход на след уровень', newState);
         } else{
-          let newState = newState.set('answerTimer', setTimeout(errorAnswer, 5000));
+          newState = newState.set('answerTimer', setTimeout(errorAnswer, 5000));
         }
+        return newState
       }
       else {
         console.log('нажата неправильная нота');
         return errorAnswer(game);
       }
-
-      return newState;
     
     case START_GAME:
-      let newState=addNote(defaultState.set('started',true));
-      repeatRandomNotes(newState);
-      return newState;
+      let addNoteState=addNote(defaultState.set('started',true));
+      repeatRandomNotes(addNoteState);
+      return addNoteState;
 
   }
   return game;
@@ -63,18 +64,23 @@ function errorAnswer(state){
 }
 
 function repeatRandomNotes(state){
-  state.get('randomNotes').forEach((item)=>playSoundtrack(item));
+  state.get('randomNotes').forEach((item)=>setTimeout(
+    ()=>{
+      console.log('item',item);
+      playSoundtrack(item)
+    },3000));
 }
 
 function nextTurn(state) {
-  let newState = state.set('noteCount', state.get('noteCount') + 1);
-  if (newState.get('noteCount') === 10) {
+  const plusCountState = state.set('noteCount', state.get('noteCount') + 1).set('currentStep',0);
+  if (plusCountState.get('noteCount') === 10) {
     console.log('победа');
     return defaultState;
   }
-  newState=addNote(newState);
-  repeatRandomNotes(newState);
-  return newState;
+  const addNoteState=addNote(plusCountState);
+  console.log ('лист нот', addNoteState.get('randomNotes'));
+  repeatRandomNotes(addNoteState);
+  return addNoteState;
 }
 
 function addNote(state){
