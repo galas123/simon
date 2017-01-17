@@ -7,7 +7,8 @@ const defaultState =Map({
   noteCount     : 1,
   currentStep:0,
   randomNotes : List([]),
-  answerTimer:null
+  answerTimer:null,
+  started:false
 });
 
 export default (game = defaultState, action) => {
@@ -15,25 +16,33 @@ export default (game = defaultState, action) => {
 
   switch (type) {
     case CLICK_NOTE:
-      playSoundtrack(payload.id);
-      if (game.randomNotes[game.get('currentStep')]===payload.id){
+      console.log('game',game, );
+      playSoundtrack(payload);
+      if (game.getIn(['randomNotes', game.get('currentStep')])==payload){
+        console.log('нажата правильная нота');
         let newState = game.set('currentStep', game.get('currentStep')+1);
-        if (newState[newState.get('currentStep')]===newState.get('noteCount')-1){
-          clearTimeout(newState.get('answerTimer'));
-          let newState = newState.set('answerTimer', null);
-          nextTurn(newState);
+        debugger;
+        if (newState.get('currentStep')===newState.get('noteCount')){
+          let answerTime=newState.get('answerTimer');
+          if (answerTime){
+            clearTimeout(answerTime);
+            let newState = newState.set('answerTimer', null);
+          } //удалить id таймаута перед нажатием очередной ноты
+
+          let newState=nextTurn(newState);
         } else{
           let newState = newState.set('answerTimer', setTimeout(errorAnswer, 5000));
         }
       }
       else {
+        console.log('нажата неправильная нота');
         return errorAnswer(game);
       }
 
       return newState;
     
     case START_GAME:
-      let newState=addNote(defaultState);
+      let newState=addNote(defaultState.set('started',true));
       repeatRandomNotes(newState);
       return newState;
 
@@ -63,13 +72,17 @@ function nextTurn(state) {
     console.log('победа');
     return defaultState;
   }
-  addNote(state);
+  newState=addNote(newState);
   repeatRandomNotes(newState);
+  return newState;
 }
 
 function addNote(state){
   const min = 1;
   const max = 4;
   const newNote=Math.floor(Math.random() * (max - min + 1)) + min;
-  return state.set('randomNotes', state.get('randomNotes').push(newNote));
+
+  const debugRandomNotes=state.get('randomNotes').push(newNote);
+  console.log('newNote',newNote, 'debugRandomNotes',debugRandomNotes);
+  return state.set('randomNotes', debugRandomNotes );
 }
