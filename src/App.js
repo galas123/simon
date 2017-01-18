@@ -2,6 +2,7 @@ import React, {Component} from 'react';
 
 import NoteBtn from './components/noteBtn'
 import StartBtn from './components/startBtn'
+import Score from './components/score'
 
 import './App.css';
 
@@ -22,7 +23,7 @@ class App extends Component {
         </div>
         <div className="panel">
           <h3 className="game-caption">SIMON</h3>
-          <div className="score">15</div>
+          <Score/>
           <div className="control-buttons">
             <StartBtn/>
             <button className="control-btn strict">STRICT</button>
