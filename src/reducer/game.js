@@ -3,12 +3,12 @@ import {CLICK_NOTE, START_GAME} from '../constants'
 import {Map, List}  from 'immutable'
 
 
-const defaultState =Map({
-  noteCount     : 1,
-  currentStep:0,
-  randomNotes : List([]),
-  answerTimer:null,
-  started:false
+const defaultState = Map({
+  noteCount  : 1,
+  currentStep: 0,
+  randomNotes: List([]),
+  answerTimer: null,
+  started    : false
 });
 
 export default (game = defaultState, action) => {
@@ -16,34 +16,36 @@ export default (game = defaultState, action) => {
 
   switch (type) {
     case CLICK_NOTE:
-      console.log('game',game, );
+      console.log('game', game,);
       playSoundtrack(payload);
-      if (game.getIn(['randomNotes', game.get('currentStep')])==payload){
-        console.log('нажата правильная нота',game.set('currentStep',0 ));
-        const step=Number(game.get('currentStep'))+1;
-        const countNotes=Number(game.get('noteCount'))
-        let newState = game.set('currentStep',step );
-        if (step === countNotes){
-          let answerTime=newState.get('answerTimer');
-          if (answerTime){
+      if (game.getIn(['randomNotes', game.get('currentStep')]) == payload) {
+        console.log('нажата правильная нота', game.set('currentStep', 0));
+        const step       = Number(game.get('currentStep')) + 1;
+        const countNotes = Number(game.get('noteCount'))
+        let newState     = game.set('currentStep', step);
+        if (step === countNotes) {
+          let answerTime = newState.get('answerTimer');
+          if (answerTime) {
             clearTimeout(answerTime);
             newState = newState.set('answerTimer', null);
           } //удалить id таймаута перед нажатием очередной ноты
 
-           newState=nextTurn(newState);
-          console.log ('переход на след уровень', newState);
-        } else{
-          newState = newState.set('answerTimer', setTimeout(errorAnswer, 5000));
+          newState = nextTurn(newState);
+          console.log('переход на след уровень', newState);
+        } else {
+          newState = newState.set('answerTimer', setTimeout(()=>errorAnswer(newState), 5000));
         }
         return newState
       }
       else {
+        let errorState     = game.set('currentStep', 0);
         console.log('нажата неправильная нота');
-        return errorAnswer(game);
+        setTimeout(()=> errorAnswer(errorState),1000);
+        return errorState
       }
-    
+
     case START_GAME:
-      let addNoteState=addNote(defaultState.set('started',true));
+      let addNoteState = addNote(defaultState.set('started', true));
       repeatRandomNotes(addNoteState);
       return addNoteState;
 
@@ -51,44 +53,64 @@ export default (game = defaultState, action) => {
   return game;
 }
 
-function playSoundtrack(id){
-  const url='https://s3.amazonaws.com/freecodecamp/simonSound'+id+'.mp3';
+function playSoundtrack(id) {
+  const url   = 'https://s3.amazonaws.com/freecodecamp/simonSound' + id + '.mp3';
   const audio = new Audio(url);
   audio.play();
 }
 
-function errorAnswer(state){
-  repeatRandomNotes(state);
-  let newState = state.set('answerTimer', setTimeout(errorAnswer, 5000));
-  return newState;
+function errorAnswer(state) {
+  const url   = 'https://downloader.disk.yandex.ru/disk/15f8ad73c05ac820fd46757f6bf3e8cff6d84a5e010a27e5bbe28756c751060b/58808b87/1Xy9V5kP-ew_sqPqeLNGLNzFHwUWsrtVdgPCPHtcwIuuxdwaRjhk1vUaW20DCPt8DTKb_DPozPokBSoXm8TZOw%3D%3D?uid=0&filename=Zvuk-Oshibki_kompyutera_%28by_JoKeR%29.mp3&disposition=attachment&hash=%2B6W2vNgvUFtDstq2UrT5t0mzokRn2MULSvhtJw1Lf6k%3D&limit=0&content_type=audio%2Fmpeg&fsize=243945&hid=cb8df1c3cb7f8ceee9d107e72a22cbbb&media_type=audio&tknv=v2';
+  const audio = new Audio(url);
+  audio.play();
+  setTimeout(()=>repeatRandomNotes(state),3000);
+  return state;
 }
 
-function repeatRandomNotes(state){
-  state.get('randomNotes').forEach((item)=>setTimeout(
-    ()=>{
-      console.log('item',item);
-      playSoundtrack(item)
-    },3000));
+function repeatRandomNotes(state) {
+  let i=0;
+  play();
+return;
+  function play() {
+
+    const promise = new Promise((resolve, reject) => {
+      if (i===state.get('randomNotes').size) {reject();}
+      const note    = state.getIn(['randomNotes', i]);
+      setTimeout(() => resolve(note), 1000);
+    });
+    promise
+      .then(
+        note => {
+          playSoundtrack(note);
+          i++;
+          play();
+        },
+        error => console.log('error =>',error)
+      )
+      .catch(
+        error=>console.log('error =>',error)
+      );
+  }
 }
 
 function nextTurn(state) {
-  const plusCountState = state.set('noteCount', state.get('noteCount') + 1).set('currentStep',0);
+  const plusCountState = state.set('noteCount', state.get('noteCount') + 1).set('currentStep', 0);
   if (plusCountState.get('noteCount') === 10) {
     console.log('победа');
     return defaultState;
   }
-  const addNoteState=addNote(plusCountState);
-  console.log ('лист нот', addNoteState.get('randomNotes'));
+  const addNoteState = addNote(plusCountState);
+  console.log('лист нот', addNoteState.get('randomNotes'));
   repeatRandomNotes(addNoteState);
   return addNoteState;
 }
 
-function addNote(state){
-  const min = 1;
-  const max = 4;
-  const newNote=Math.floor(Math.random() * (max - min + 1)) + min;
+function addNote(state) {
+  const min     = 1;
+  const max     = 4;
+  const newNote = Math.floor(Math.random() * (max - min + 1)) + min;
 
-  const debugRandomNotes=state.get('randomNotes').push(newNote);
-  console.log('newNote',newNote, 'debugRandomNotes',debugRandomNotes);
-  return state.set('randomNotes', debugRandomNotes );
+  const debugRandomNotes = state.get('randomNotes').push(newNote);
+  console.log('newNote', newNote, 'debugRandomNotes', debugRandomNotes);
+  return state.set('randomNotes', debugRandomNotes);
 }
