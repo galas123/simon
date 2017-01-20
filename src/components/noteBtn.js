@@ -18,10 +18,16 @@ class clickNoteBtn extends Component {
   }
 
   clickBtn = (ev) => {
-    const {clickNote, id}=this.props;
+    const {clickNote, id, lock}=this.props;
     ev.preventDefault();
-    clickNote(id);
+    if (!lock) {
+      clickNote(id);
+    }
   }
 }
 
-export default connect(null, {clickNote})(clickNoteBtn);
+const mapStateToProps = state=>({
+  lock: state.game.get('lock')
+});
+
+export default connect(mapStateToProps, {clickNote})(clickNoteBtn);
