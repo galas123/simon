@@ -8,17 +8,31 @@
   border:3px solid #fff;
 }
 .sector1{
-  background-color: #F6C6CE;
+  background-color: hsla(350, 73%, 87%, 1);
+}
+.sector1--selected{
+  background-color: hsla(350, 73%, 77%, 1);
 }
 .sector2{
-  background-color: #ffff4f;
+  background-color: hsla(60, 100%, 65%, 1);
 }
+.sector2--selected {
+  background-color: hsla(60, 100%, 45%, 1);
+}
+
 .sector3{
-  background-color: #7fdbff;
+  background-color: hsla(197, 100%, 75%, 1);
+}
+.sector3--selected {
+  background-color: hsla(197, 100%, 65%, 1);
 }
 .sector4{
-  background-color: #01ff70;
+  background-color: hsla(146, 100%, 50%, 1);
 }
+.sector4--selected {
+  background-color: hsla(146, 100%, 40%, 1);
+}
+
 .simon{
   border: 1px solid #fff;
   overflow: hidden;
