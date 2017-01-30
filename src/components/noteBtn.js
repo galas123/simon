@@ -8,19 +8,14 @@ import {clickNote} from '../AC/clickNote';
 
 class clickNoteBtn extends Component {
 
-  constructor(props) {
-    super(props);
-    this.state = {selected: false};
-  }
   render() {
-    const {id}=this.props;
+    const {id, lightingBtn}=this.props;
     const cl=`sector${id}--selected`;
+  
     return (
       <button
-        className={cx(`sector sector${id}`,{[cl]:this.state.selected})}
+        className={cx(`sector sector${id}`,{[cl]:Number(id)===Number(lightingBtn)})}
         onClick={this.clickBtn}
-        onMouseDown ={this.mouseDownBtn}
-        onMouseUp ={this.mouseUpBtn}
       />
     );
   }
@@ -32,22 +27,11 @@ class clickNoteBtn extends Component {
       clickNote(id);
     }
   }
-  mouseDownBtn=(ev) => {
-    ev.preventDefault();
-    this.setState({
-      selected: true
-    });
-  }
-  mouseUpBtn=(ev) => {
-    ev.preventDefault();
-    this.setState({
-      selected: false
-    });
-  }
 }
 
 const mapStateToProps = state=>({
-  lock: state.game.get('lock')
+  lock: state.game.get('lock'),
+  lightingBtn:state.game.get('lightingBtn')
 });
 
 export default connect(mapStateToProps, {clickNote})(clickNoteBtn);
