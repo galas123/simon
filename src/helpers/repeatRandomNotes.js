@@ -1,18 +1,26 @@
 import {PLAY_NOTE} from '../constants'
 
 export default (state, dispatch) => {
-console.log('repeatRandomeNotes');
+console.log('repeatRandomNotes');
+  return new Promise((resolveMelody) => {
     let i = 0;
     play();
+  
     function play() {
       const promise = new Promise((resolve, reject) => {
         if (i === state.get('randomNotes').size) {
-          reject();
+          reject('finish');
+
+          resolveMelody();
+         
         }
-        const note = state.getIn(['randomNotes', i]);
-        console.log('repeatNotes, note=',note);
-        setTimeout(() => resolve(note), 500);
+        else {
+          const note = state.getIn(['randomNotes', i]);
+          console.log('repeatNotes, note=', note);
+          setTimeout(() => resolve(note), 500);
+        }
       });
+      
       promise
         .then(
           note => {
@@ -31,4 +39,5 @@ console.log('repeatRandomeNotes');
           error=>console.log('error =>', error)
         );
     }
+  });
 }

@@ -2,6 +2,7 @@ import React, {Component} from 'react';
 
 import NoteBtn from './components/noteBtn'
 import StartBtn from './components/startBtn'
+import StrictBtn from './components/strictBtn'
 import Score from './components/score'
 
 import './App.css';
@@ -26,7 +27,7 @@ class App extends Component {
           <Score/>
           <div className="control-buttons">
             <StartBtn/>
-            <button className="control-btn strict">STRICT</button>
+            <StrictBtn/>
           </div>
           <div className="switch-on-off">
             <label className="switch">

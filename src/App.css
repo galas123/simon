@@ -147,3 +147,6 @@
 .slider.round:before {
   border-radius: 50%;
 }
+.strict{
+  background-color: #ed225d;
+}

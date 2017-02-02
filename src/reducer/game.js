@@ -1,4 +1,4 @@
-import {START_GAME, LOCK, PLAY_NOTE, SWITCH_OF_LIGHT, NEXT_TURN, WRONG_NOTE, NEXT_NOTE, UNLOCK} from '../constants'
+import {START_GAME, LOCK, PLAY_NOTE, SWITCH_OF_LIGHT, NEXT_TURN, WRONG_NOTE, NEXT_NOTE, UNLOCK, STRICT_GAME } from '../constants'
 
 import {Map, List}  from 'immutable'
 
@@ -10,7 +10,8 @@ const defaultState = Map({
   answerTimer: null,
   started    : false,
   lock:false,
-  lightingBtn:false
+  lightingBtn:false,
+  strict:false
 });
 
 export default (game = defaultState, action) => {
@@ -23,7 +24,8 @@ export default (game = defaultState, action) => {
       return game.set('lock', false);
     
     case START_GAME:
-      let addNoteState = addNote(defaultState.set('started', true));
+      const strict=game.get('strict');
+      let addNoteState = addNote(defaultState.set('started', true).set('strict',strict));
       return addNoteState;
     
     case PLAY_NOTE:
@@ -43,6 +45,9 @@ export default (game = defaultState, action) => {
     case WRONG_NOTE:
       let errorState = game.set('currentStep', 0);
       return errorState;
+
+    case STRICT_GAME:
+      return game.set('strict', !game.get('strict'));
   }
   return game;
 }
@@ -51,7 +56,7 @@ function nextTurn(state) {
   const plusCountState = state.set('noteCount', state.get('noteCount') + 1).set('currentStep', 0);
   if (plusCountState.get('noteCount') === 6) {
     console.log('победа');
-    return defaultState;
+    return defaultState.set('noteCount','win');
   }
   const addNoteState = addNote(plusCountState);
   return addNoteState

@@ -12,7 +12,7 @@ export const clickNote = (id) => {
       }
     );
     const started = state.get('started');
-    
+
     if (started) {
       dispatch(
         {
@@ -48,35 +48,31 @@ export const clickNote = (id) => {
           }
         );
 
-        errorAnswer(getState().game);
+       setTimeout( ()=>errorAnswer(getState().game),500);
 
       }
     }
 
     function errorAnswer(state) {
-      const url   = 'https://downloader.disk.yandex.ru/disk/15f8ad73c05ac820fd46757f6bf3e8cff6d84a5e010a27e5bbe28756c751060b/58808b87/1Xy9V5kP-ew_sqPqeLNGLNzFHwUWsrtVdgPCPHtcwIuuxdwaRjhk1vUaW20DCPt8DTKb_DPozPokBSoXm8TZOw%3D%3D?uid=0&filename=Zvuk-Oshibki_kompyutera_%28by_JoKeR%29.mp3&disposition=attachment&hash=%2B6W2vNgvUFtDstq2UrT5t0mzokRn2MULSvhtJw1Lf6k%3D&limit=0&content_type=audio%2Fmpeg&fsize=243945&hid=cb8df1c3cb7f8ceee9d107e72a22cbbb&media_type=audio&tknv=v2';
+      const url   = 'http://s0.vocaroo.com/media/download_temp/Vocaroo_s0uIfEdiF7qP.mp3';
       const audio = new Audio(url);
       audio.play();
-      setTimeout(()=>repeatRandomNotes(state, dispatch),3000);
-
-
-      const promise = new Promise((resolve, reject) => {
-        setTimeout(() => resolve(note), 500);
-      });
-
-      promise
-        .then(
-          note => {
+      setTimeout(()=> {
+          repeatRandomNotes(state, dispatch).then(() => {
             dispatch(
               {
-                type   : UNLOCK,
+                type: UNLOCK
               }
             );
-          }
+          })
+        }
+        , 3000
+      );
+
 
       return state;
     }
 
   }
-};
+}
 
