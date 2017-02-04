@@ -1,7 +1,6 @@
 import {PLAY_NOTE} from '../constants'
 
 export default (state, dispatch) => {
-console.log('repeatRandomNotes');
   return new Promise((resolveMelody) => {
     let i = 0;
     play();
@@ -16,7 +15,6 @@ console.log('repeatRandomNotes');
         }
         else {
           const note = state.getIn(['randomNotes', i]);
-          console.log('repeatNotes, note=', note);
           setTimeout(() => resolve(note), 500);
         }
       });

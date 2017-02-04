@@ -6,6 +6,7 @@
   width :250px;
   height:250px;
   border:3px solid #fff;
+  position:relative;
 }
 .sector1{
   background-color: hsla(350, 73%, 87%, 1);
@@ -90,6 +91,7 @@
 }
 .switch-on-off__text{
   margin-top:5px;
+  color:black;
 }
 
 .switch {
@@ -149,4 +151,15 @@
 }
 .strict{
   background-color: #ed225d;
+}
+.sector.switch-off::after{
+  width :250px;
+  height:250px;
+  position:absolute;
+  content:'';
+  top:0;
+  left:0;
+  border:3px solid #fff;
+  background-color:rgba(212,205,205,0.8);
+
 }

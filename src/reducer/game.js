@@ -1,13 +1,13 @@
-import {START_GAME, LOCK, PLAY_NOTE, SWITCH_OF_LIGHT, NEXT_TURN, WRONG_NOTE, NEXT_NOTE, UNLOCK, STRICT_GAME } from '../constants'
+import {START_GAME, LOCK, PLAY_NOTE, SWITCH_OF_LIGHT, NEXT_TURN, WRONG_NOTE, NEXT_NOTE, UNLOCK, STRICT_GAME, SWITCH_ON_OFF } from '../constants'
 
 import {Map, List}  from 'immutable'
 
 
 const defaultState = Map({
+  switchOff:true,
   noteCount  : 1,
   currentStep: 0,
   randomNotes: List([]),
-  answerTimer: null,
   started    : false,
   lock:false,
   lightingBtn:false,
@@ -21,7 +21,11 @@ export default (game = defaultState, action) => {
       return game.set('lock', true);
     
     case UNLOCK:
+      console.log('unlock from UNLOCK');
       return game.set('lock', false);
+
+    case SWITCH_ON_OFF:
+      return defaultState.set('switchOff',!game.get('switchOff'));
     
     case START_GAME:
       const strict=game.get('strict');
@@ -33,17 +37,26 @@ export default (game = defaultState, action) => {
     
     case NEXT_TURN:
       let newState=nextTurn(game);
+      console.log('unlock from nextTurn');
       return newState.set('lock', false);
+    
 
     case NEXT_NOTE:
       let step=game.get('currentStep')+1;
+      console.log('unlock from nextNote');
       return game.set('currentStep', step).set('lock', false) ;
 
     case  SWITCH_OF_LIGHT:
       return game.set('lightingBtn', false);
     
     case WRONG_NOTE:
-      let errorState = game.set('currentStep', 0);
+      let errorState;
+      if (game.get('strict')) {
+          errorState = addNote(defaultState.set('lightingBtn',payload).set('started', true).set('strict', true).set('lock',true));
+        }
+       else{
+        errorState = game.set('currentStep', 0);
+      }
       return errorState;
 
     case STRICT_GAME:
@@ -55,7 +68,6 @@ export default (game = defaultState, action) => {
 function nextTurn(state) {
   const plusCountState = state.set('noteCount', state.get('noteCount') + 1).set('currentStep', 0);
   if (plusCountState.get('noteCount') === 6) {
-    console.log('победа');
     return defaultState.set('noteCount','win');
   }
   const addNoteState = addNote(plusCountState);

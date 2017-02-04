@@ -6,6 +6,7 @@ export const clickNote = (id) => {
   return (dispatch, getState) => {
     const state = getState().game;
     const lock  = state.get('lock');
+    console.log('lock');
     dispatch(
       {
         type: LOCK
@@ -14,14 +15,14 @@ export const clickNote = (id) => {
     const started = state.get('started');
 
     if (started) {
-      dispatch(
-        {
-          type   : PLAY_NOTE,
-          payload: id
-        }
-      );
-
       if (state.getIn(['randomNotes', state.get('currentStep')]) == id) {
+        console.log('kjddhfkjhdkjg', state.getIn(['randomNotes', state.get('currentStep')]), id);
+        dispatch(
+          {
+            type   : PLAY_NOTE,
+            payload: id
+          }
+        );
         const step       = Number(state.get('currentStep')) + 1;
         const countNotes = Number(state.get('noteCount'));
         if (step === countNotes) {
@@ -44,11 +45,19 @@ export const clickNote = (id) => {
       else {
         dispatch(
           {
+            type   : PLAY_NOTE,
+            payload: id,
+            wrong:true
+          }
+        );
+        dispatch(
+          {
             type: WRONG_NOTE,
+            payload: id,
           }
         );
 
-       setTimeout( ()=>errorAnswer(getState().game),500);
+       setTimeout( ()=>errorAnswer(getState().game),300);
 
       }
     }
@@ -57,17 +66,18 @@ export const clickNote = (id) => {
       const url   = 'http://s0.vocaroo.com/media/download_temp/Vocaroo_s0uIfEdiF7qP.mp3';
       const audio = new Audio(url);
       audio.play();
-      setTimeout(()=> {
-          repeatRandomNotes(state, dispatch).then(() => {
-            dispatch(
-              {
-                type: UNLOCK
-              }
-            );
-          })
-        }
-        , 3000
-      );
+        setTimeout(()=> {
+            repeatRandomNotes(state, dispatch).then(() => {
+              dispatch(
+                {
+                  type: UNLOCK
+                }
+              );
+            })
+          }
+          , 3000
+        );
+
 
 
       return state;
