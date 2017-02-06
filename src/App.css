@@ -7,6 +7,8 @@
   height:250px;
   border:3px solid #fff;
   position:relative;
+  padding:0;
+  outline: none;
 }
 .sector1{
   background-color: hsla(350, 73%, 87%, 1);
@@ -17,20 +19,20 @@
 .sector2{
   background-color: hsla(60, 100%, 65%, 1);
 }
-.sector2--selected {
+.sector2.sector--selected {
   background-color: hsla(60, 100%, 45%, 1);
 }
 
 .sector3{
   background-color: hsla(197, 100%, 75%, 1);
 }
-.sector3--selected {
+.sector3.sector--selected {
   background-color: hsla(197, 100%, 65%, 1);
 }
 .sector4{
   background-color: hsla(146, 100%, 50%, 1);
 }
-.sector4--selected {
+.sector4.sector--selected {
   background-color: hsla(146, 100%, 40%, 1);
 }
 
@@ -153,13 +155,12 @@
   background-color: #ed225d;
 }
 .sector.switch-off::after{
-  width :250px;
-  height:250px;
+  width: 244px;
+  height: 244px;
   position:absolute;
   content:'';
   top:0;
   left:0;
-  border:3px solid #fff;
   background-color:rgba(212,205,205,0.8);
 
 }

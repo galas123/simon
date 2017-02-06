@@ -17,7 +17,7 @@ import {Map, List}  from 'immutable'
 
 const defaultState = Map({
   switchOff  : true,
-  noteCount  : 1,
+  noteCount  : '--',
   currentStep: 0,
   randomNotes: List([]),
   started    : false,
@@ -45,7 +45,7 @@ export default (game = defaultState, action) => {
 
     case START_GAME:
       const strict     = game.get('strict');
-      let addNoteState = addNote(defaultState.set('started', true).set('strict', strict)).set('switchOff', false);
+      let addNoteState = addNote(defaultState.set('started', true).set('strict', strict)).set('switchOff', false).set('noteCount',1);
       return addNoteState;
 
     case PLAY_NOTE:
@@ -66,7 +66,7 @@ export default (game = defaultState, action) => {
     case WRONG_NOTE:
       let errorState;
       if (game.get('strict')) {
-        errorState = addNote(defaultState.set('lightingBtn', payload).set('started', true).set('strict', true).set('lock', true).set('switchOff', false));
+        errorState = addNote(defaultState.set('noteCount',1).set('lightingBtn', payload).set('started', true).set('strict', true).set('lock', true).set('switchOff', false));
       }
       else {
         errorState = game.set('currentStep', 0);
