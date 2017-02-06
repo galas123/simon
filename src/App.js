@@ -11,13 +11,11 @@ import './App.css';
 class App extends Component {
 
   render() {
-    
     return (
       <div className="simon">
         <div className="sector-line">
           <NoteBtn id={"1"}/>
           <NoteBtn id={"2"}/>
-          
         </div>
         <div className="sector-line">
           <NoteBtn id={"3"}/>

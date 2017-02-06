@@ -1,21 +1,19 @@
 import React, {
   Component
 } from 'react';
-import '../App.css';
 import {connect} from 'react-redux';
 
-import {switchOnOff} from '../AC/switchOnOff';
+import {switchOn} from '../AC/switchOn';
+import {switchOff} from '../AC/switchOff';
+
+import '../App.css';
 
 class clickSwitchOnOff extends Component {
   render() {
-    const {switchOff}=this.props;
     return (
-      <div
-        className="switch-on-off"
-        onClick={this.clickBtn}
-      >
+      <div className="switch-on-off">
         <label className="switch">
-          <input className="switch__input" type="checkbox"/>
+          <input className="switch__input" type="checkbox" onChange={this.onChange}/>
           <div className="slider round"></div>
         </label>
         <p className="switch-on-off__text">off/on</p>
@@ -23,12 +21,11 @@ class clickSwitchOnOff extends Component {
     );
   }
 
-  clickBtn = (ev) => {
-    const {switchOnOff}=this.props;
-    ev.preventDefault();
-    switchOnOff();
+  onChange = (e)=> {
+    const {switchOn, switchOff}=this.props;
+    const checked = e.target.checked;
+    checked ? switchOn() : switchOff(); 
   }
 }
 
-
-export default connect(null, {switchOnOff})(clickSwitchOnOff);
+export default connect(null, {switchOn, switchOff })(clickSwitchOnOff);

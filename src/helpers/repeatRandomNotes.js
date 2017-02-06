@@ -9,9 +9,7 @@ export default (state, dispatch) => {
       const promise = new Promise((resolve, reject) => {
         if (i === state.get('randomNotes').size) {
           reject('finish');
-
           resolveMelody();
-         
         }
         else {
           const note = state.getIn(['randomNotes', i]);

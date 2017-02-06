@@ -11,7 +11,7 @@
 .sector1{
   background-color: hsla(350, 73%, 87%, 1);
 }
-.sector1--selected{
+.sector1.sector--selected{
   background-color: hsla(350, 73%, 77%, 1);
 }
 .sector2{

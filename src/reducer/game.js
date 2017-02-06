@@ -1,17 +1,29 @@
-import {START_GAME, LOCK, PLAY_NOTE, SWITCH_OF_LIGHT, NEXT_TURN, WRONG_NOTE, NEXT_NOTE, UNLOCK, STRICT_GAME, SWITCH_ON_OFF } from '../constants'
+import {
+  START_GAME,
+  LOCK,
+  PLAY_NOTE,
+  SWITCH_OFF_LIGHT,
+  NEXT_TURN,
+  WRONG_NOTE,
+  NEXT_NOTE,
+  UNLOCK,
+  STRICT_GAME,
+  SWITCH_ON,
+  SWITCH_OFF
+} from '../constants'
 
 import {Map, List}  from 'immutable'
 
 
 const defaultState = Map({
-  switchOff:true,
+  switchOff  : true,
   noteCount  : 1,
   currentStep: 0,
   randomNotes: List([]),
   started    : false,
-  lock:false,
-  lightingBtn:false,
-  strict:false
+  lock       : false,
+  lightingBtn: false,
+  strict     : false
 });
 
 export default (game = defaultState, action) => {
@@ -19,42 +31,44 @@ export default (game = defaultState, action) => {
   switch (type) {
     case LOCK:
       return game.set('lock', true);
-    
+
     case UNLOCK:
       console.log('unlock from UNLOCK');
       return game.set('lock', false);
 
-    case SWITCH_ON_OFF:
-      return defaultState.set('switchOff',!game.get('switchOff'));
-    
+    case SWITCH_ON:
+      return defaultState.set('switchOff', false).set('lock', false);
+
+    case SWITCH_OFF:
+
+      return defaultState.set('switchOff', true).set('lock', true);
+
     case START_GAME:
-      const strict=game.get('strict');
-      let addNoteState = addNote(defaultState.set('started', true).set('strict',strict));
+      const strict     = game.get('strict');
+      let addNoteState = addNote(defaultState.set('started', true).set('strict', strict)).set('switchOff', false);
       return addNoteState;
-    
+
     case PLAY_NOTE:
       return game.set('lightingBtn', payload);
-    
+
     case NEXT_TURN:
-      let newState=nextTurn(game);
-      console.log('unlock from nextTurn');
+      let newState = nextTurn(game);
       return newState.set('lock', false);
-    
+
 
     case NEXT_NOTE:
-      let step=game.get('currentStep')+1;
-      console.log('unlock from nextNote');
-      return game.set('currentStep', step).set('lock', false) ;
+      let step = game.get('currentStep') + 1;
+      return game.set('currentStep', step).set('lock', false);
 
-    case  SWITCH_OF_LIGHT:
+    case  SWITCH_OFF_LIGHT:
       return game.set('lightingBtn', false);
-    
+
     case WRONG_NOTE:
       let errorState;
       if (game.get('strict')) {
-          errorState = addNote(defaultState.set('lightingBtn',payload).set('started', true).set('strict', true).set('lock',true));
-        }
-       else{
+        errorState = addNote(defaultState.set('lightingBtn', payload).set('started', true).set('strict', true).set('lock', true).set('switchOff', false));
+      }
+      else {
         errorState = game.set('currentStep', 0);
       }
       return errorState;
@@ -68,7 +82,7 @@ export default (game = defaultState, action) => {
 function nextTurn(state) {
   const plusCountState = state.set('noteCount', state.get('noteCount') + 1).set('currentStep', 0);
   if (plusCountState.get('noteCount') === 6) {
-    return defaultState.set('noteCount','win');
+    return defaultState.set('noteCount', 'win').set('switchOff', false).set('lock', true);
   }
   const addNoteState = addNote(plusCountState);
   return addNoteState
@@ -76,10 +90,10 @@ function nextTurn(state) {
 
 
 function addNote(state) {
-  const min     = 1;
-  const max     = 4;
-  const newNote = Math.floor(Math.random() * (max - min + 1)) + min;
-  const  plusNoteState= state.get('randomNotes').push(newNote);
-  console.log ('рандомные ноты:', plusNoteState.toJS());
+  const min           = 1;
+  const max           = 4;
+  const newNote       = Math.floor(Math.random() * (max - min + 1)) + min;
+  const plusNoteState = state.get('randomNotes').push(newNote);
+  console.log('рандомные ноты:', plusNoteState.toJS());
   return state.set('randomNotes', plusNoteState);
 }

@@ -27,7 +27,7 @@ class clickStrictBtn extends Component {
 }
 
 const mapStateToProps = state=>({
-  strict       : state.game.get('strict'),
+  strict       : state.game.get('strict')
 });
 
 export default connect(mapStateToProps, {strictMode})(clickStrictBtn);
