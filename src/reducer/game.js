@@ -52,12 +52,12 @@ export default (game = defaultState, action) => {
 
     case NEXT_TURN:
       let newState = nextTurn(game);
-      return newState.set('lock', false);
+      return newState;
 
 
     case NEXT_NOTE:
       let step = game.get('currentStep') + 1;
-      return game.set('currentStep', step).set('lock', false);
+      return game.set('currentStep', step);
 
     case  SWITCH_OFF_LIGHT:
       return game.set('lightingBtn', false);

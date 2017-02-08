@@ -1,16 +1,18 @@
-import {PLAY_NOTE} from '../constants'
+import {PLAY_NOTE,UNLOCK} from '../constants'
 
 export default (state, dispatch) => {
-  return new Promise((resolveMelody) => {
     let i = 0;
     play();
   
     function play() {
       const promise = new Promise((resolve, reject) => {
         if (i === state.get('randomNotes').size) {
+          dispatch(
+            {
+              type: UNLOCK
+            }
+          );
           reject('finish');
-          resolveMelody();
-          
         }
         else {
           const note = state.getIn(['randomNotes', i]);
@@ -37,5 +39,4 @@ export default (state, dispatch) => {
           error=>console.log('error =>', error)
         );
     }
-  });
 }

@@ -10,15 +10,17 @@ export const clickNote = (note) => {
       }
     );
     const currentStep     = state.get('currentStep');
-    const nextCorrectNote = state.getIn(['randomNotes', currentStep]);
-    if (nextCorrectNote == note) {
-      dispatch(
-        {
-          type   : PLAY_NOTE,
-          payload: note,
-          wrong  : false
-        }
-      );
+    const nextCorrectNote = Number(state.getIn(['randomNotes', currentStep]));
+    const isWrongNote=nextCorrectNote !== Number(note);
+    console.log('isWrongNote', isWrongNote);
+    dispatch(
+      {
+        type   : PLAY_NOTE,
+        payload: note,
+        wrong  : isWrongNote
+      }
+    );
+    if (!isWrongNote) {
       const step       = Number(state.get('currentStep')) + 1;
       const notesCount = Number(state.get('notesCount'));
       if (step === notesCount) {
@@ -27,7 +29,10 @@ export const clickNote = (note) => {
             type: NEXT_TURN
           }
         );
-        setTimeout(()=>repeatRandomNotes(getState().game, dispatch), 1500);
+        setTimeout(()=> {
+            repeatRandomNotes(getState().game, dispatch)
+          }
+          , 1000);
       }
       else {
         dispatch(
@@ -35,35 +40,25 @@ export const clickNote = (note) => {
             type: NEXT_NOTE
           }
         );
+        dispatch(
+          {
+            type: UNLOCK
+          }
+        );
       }
     }
     else {
       dispatch(
         {
-          type   : PLAY_NOTE,
-          payload: note,
-          wrong  : true
-        }
-
-      );
-      dispatch(
-        {
           type   : WRONG_NOTE,
-          payload: note,
+          payload: note
         }
-
       );
         setTimeout(()=> {
-            repeatRandomNotes(getState().game, dispatch).then(() => {
-              dispatch(
-                {
-                  type: UNLOCK
-                }
-              );
-            })
+            repeatRandomNotes(getState().game, dispatch)
           }
-          , 3000);
+          , 2000);
     }
   }
-}
+};
 
