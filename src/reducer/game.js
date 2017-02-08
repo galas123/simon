@@ -17,7 +17,7 @@ import {Map, List}  from 'immutable'
 
 const defaultState = Map({
   switchOff  : true,
-  noteCount  : '--',
+  notesCount  : '--',
   currentStep: 0,
   randomNotes: List([]),
   started    : false,
@@ -40,12 +40,11 @@ export default (game = defaultState, action) => {
       return defaultState.set('switchOff', false).set('lock', false);
 
     case SWITCH_OFF:
-
       return defaultState.set('switchOff', true).set('lock', true);
 
     case START_GAME:
       const strict     = game.get('strict');
-      let addNoteState = addNote(defaultState.set('started', true).set('strict', strict)).set('switchOff', false).set('noteCount',1);
+      let addNoteState = addNote(defaultState.set('started', true).set('strict', strict)).set('switchOff', false).set('notesCount',1);
       return addNoteState;
 
     case PLAY_NOTE:
@@ -66,7 +65,8 @@ export default (game = defaultState, action) => {
     case WRONG_NOTE:
       let errorState;
       if (game.get('strict')) {
-        errorState = addNote(defaultState.set('noteCount',1).set('lightingBtn', payload).set('started', true).set('strict', true).set('lock', true).set('switchOff', false));
+        errorState = addNote(defaultState.set('notesCount',1).set('lightingBtn', payload).set('started', true).set('strict', true).set('lock', true).set('switchOff', false));
+          console.log('набор нот после ошибки:',errorState.get('randomNotes'));     
       }
       else {
         errorState = game.set('currentStep', 0);
@@ -80,9 +80,9 @@ export default (game = defaultState, action) => {
 }
 
 function nextTurn(state) {
-  const plusCountState = state.set('noteCount', state.get('noteCount') + 1).set('currentStep', 0);
-  if (plusCountState.get('noteCount') === 6) {
-    return defaultState.set('noteCount', 'win').set('switchOff', false).set('lock', true);
+  const plusCountState = state.set('notesCount', state.get('notesCount') + 1).set('currentStep', 0);
+  if (plusCountState.get('notesCount') === 6) {
+    return defaultState.set('notesCount', 'win').set('switchOff', false).set('lock', true);
   }
   const addNoteState = addNote(plusCountState);
   return addNoteState

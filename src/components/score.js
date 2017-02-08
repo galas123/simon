@@ -6,15 +6,15 @@ import {connect} from 'react-redux';
 
 class score extends Component {
   render() {
-    const {noteCount}=this.props;
+    const {notesCount}=this.props;
     return (
-      <div className="score">{noteCount}</div>
+      <div className="score">{notesCount}</div>
     );
 
   }
 }
 const mapStateToProps = state=>({
-  noteCount       : state.game.get('noteCount')
+  notesCount       : state.game.get('notesCount')
 });
 
 export default connect(mapStateToProps, null)(score);

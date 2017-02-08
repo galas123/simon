@@ -10,6 +10,7 @@ export default (state, dispatch) => {
         if (i === state.get('randomNotes').size) {
           reject('finish');
           resolveMelody();
+          
         }
         else {
           const note = state.getIn(['randomNotes', i]);
@@ -23,7 +24,8 @@ export default (state, dispatch) => {
             dispatch(
               {
                 type   : PLAY_NOTE,
-                payload: note
+                payload: note,
+                wrong:false
               }
             );
             i++;

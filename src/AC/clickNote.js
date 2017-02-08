@@ -1,30 +1,27 @@
 import {LOCK, PLAY_NOTE, NEXT_TURN, WRONG_NOTE, NEXT_NOTE, UNLOCK} from '../constants'
 import repeatRandomNotes from '../helpers/repeatRandomNotes';
 
-export const clickNote = (id) => {
+export const clickNote = (note) => {
   return (dispatch, getState) => {
     const state = getState().game;
-   dispatch(
+    dispatch(
       {
         type: LOCK
       }
     );
-    const started = state.get('started');
-
-    if (!started) {
-      return;
-    }
-    
-    if (state.getIn(['randomNotes', state.get('currentStep')]) == id) {
+    const currentStep     = state.get('currentStep');
+    const nextCorrectNote = state.getIn(['randomNotes', currentStep]);
+    if (nextCorrectNote == note) {
       dispatch(
         {
           type   : PLAY_NOTE,
-          payload: id
+          payload: note,
+          wrong  : false
         }
       );
       const step       = Number(state.get('currentStep')) + 1;
-      const countNotes = Number(state.get('noteCount'));
-      if (step === countNotes) {
+      const notesCount = Number(state.get('notesCount'));
+      if (step === notesCount) {
         dispatch(
           {
             type: NEXT_TURN
@@ -41,31 +38,23 @@ export const clickNote = (id) => {
       }
     }
     else {
-        dispatch(
-          {
-            type   : PLAY_NOTE,
-            payload: id,
-            wrong:true
-          }
-        );
-        dispatch(
-          {
-            type: WRONG_NOTE,
-            payload: id,
-          }
-        );
+      dispatch(
+        {
+          type   : PLAY_NOTE,
+          payload: note,
+          wrong  : true
+        }
 
-       setTimeout( ()=>errorAnswer(getState().game),100);
+      );
+      dispatch(
+        {
+          type   : WRONG_NOTE,
+          payload: note,
+        }
 
-      }
-    
-
-    function errorAnswer(state) {
-      const url   = 'http://s0.vocaroo.com/media/download_temp/Vocaroo_s0uIfEdiF7qP.mp3';
-      const audio = new Audio(url);
-      audio.play();
+      );
         setTimeout(()=> {
-            repeatRandomNotes(state, dispatch).then(() => {
+            repeatRandomNotes(getState().game, dispatch).then(() => {
               dispatch(
                 {
                   type: UNLOCK
@@ -73,9 +62,7 @@ export const clickNote = (id) => {
               );
             })
           }
-          , 3000
-        );
-      return state;
+          , 3000);
     }
   }
 }

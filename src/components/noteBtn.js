@@ -9,10 +9,11 @@ import {clickNote} from '../AC/clickNote';
 class clickNoteBtn extends Component {
 
   render() {
-    const {id, lightingBtn, switchOff} = this.props;
+    const {id, lightingBtn, switchOff, started} = this.props;
     return (
       <button
-        className={cx(`sector sector${id}`,{'sector--selected':Number(id)===Number(lightingBtn)}, {'switch-off': switchOff})}
+        className={cx(`sector sector${id}`,{'sector--selected':Number(id)===Number(lightingBtn)}, 
+        {'switch-off': switchOff}, {'enactive':!started})}
         onClick={this.clickBtn}
       />
     );
@@ -30,7 +31,8 @@ class clickNoteBtn extends Component {
 const mapStateToProps = state=>({
   lock       : state.game.get('lock'),
   lightingBtn: state.game.get('lightingBtn'),
-  switchOff  : state.game.get('switchOff')
+  switchOff  : state.game.get('switchOff'),
+  started    : state.game.get('started')
 });
 
 export default connect(mapStateToProps, {clickNote})(clickNoteBtn);
