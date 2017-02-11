@@ -3,8 +3,8 @@ import React, {
 } from 'react';
 import {connect} from 'react-redux';
 
-import {switchOn} from '../AC/switchOn';
-import {switchOff} from '../AC/switchOff';
+import {toggleSwitch} from '../AC/toggleSwitch';
+
 
 import '../App.css';
 
@@ -22,10 +22,10 @@ class switchOnOff extends Component {
   }
 
   onChange = (e)=> {
-    const {switchOn, switchOff}=this.props;
+    const {toggleSwitch}=this.props;
     const checked = e.target.checked;
-    checked ? switchOn() : switchOff(); 
+    toggleSwitch(); 
   }
 }
 
-export default connect(null, {switchOn, switchOff })(switchOnOff);
+export default connect(null, {toggleSwitch})(switchOnOff);

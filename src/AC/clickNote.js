@@ -11,7 +11,7 @@ export const clickNote = (note) => {
     );
     const currentStep     = state.get('currentStep');
     const nextCorrectNote = Number(state.getIn(['randomNotes', currentStep]));
-    const isWrongNote=nextCorrectNote !== Number(note);
+    const isWrongNote     = nextCorrectNote !== note;
     dispatch(
       {
         type   : PLAY_NOTE,
@@ -53,10 +53,10 @@ export const clickNote = (note) => {
           payload: note
         }
       );
-        setTimeout(()=> {
-            repeatRandomNotes(getState().game, dispatch)
-          }
-          , 2000);
+      setTimeout(()=> {
+          repeatRandomNotes(getState().game, dispatch)
+        }
+        , 2000);
     }
   }
 };

@@ -4,7 +4,7 @@ import React, {
 import cx from 'classnames';
 import {connect} from 'react-redux';
 
-import {strictMode} from '../AC/strictMode';
+import {toggleStrictMode} from '../AC/toggleStrictMode';
 
 class clickStrictBtn extends Component {
   render() {
@@ -20,9 +20,9 @@ class clickStrictBtn extends Component {
   }
 
   onClick = (ev) => {
-    const {strictMode}=this.props;
+    const {toggleStrictMode}=this.props;
     ev.preventDefault();
-    strictMode();
+    toggleStrictMode();
   }
 }
 
@@ -30,4 +30,4 @@ const mapStateToProps = state=>({
   strict       : state.game.get('strict')
 });
 
-export default connect(mapStateToProps, {strictMode})(clickStrictBtn);
+export default connect(mapStateToProps, {toggleStrictMode})(clickStrictBtn);

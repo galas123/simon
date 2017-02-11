@@ -14,12 +14,12 @@ class App extends Component {
     return (
       <div className="simon">
         <div className="sector-line">
-          <NoteBtn id={"1"}/>
-          <NoteBtn id={"2"}/>
+          <NoteBtn id={1}/>
+          <NoteBtn id={2}/>
         </div>
         <div className="sector-line">
-          <NoteBtn id={"3"}/>
-          <NoteBtn id={"4"}/>
+          <NoteBtn id={3}/>
+          <NoteBtn id={4}/>
         </div>
         <div className="panel">
           <h3 className="game-caption">SIMON</h3>
