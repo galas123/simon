@@ -12,14 +12,14 @@ class clickStrictBtn extends Component {
     return (
     <button
       className={cx(`control-btn`,{'strict':strict})}
-      onClick={this.clickBtn}
+      onClick={this.onClick}
     >
       STRICT
     </button>
     );
   }
 
-  clickBtn = (ev) => {
+  onClick = (ev) => {
     const {strictMode}=this.props;
     ev.preventDefault();
     strictMode();

@@ -16,13 +16,13 @@ import {Map, List}  from 'immutable'
 
 
 const defaultState = Map({
-  switchOff  : true,
+  isSwitchedOff  : true,
   notesCount  : '--',
   currentStep: 0,
   randomNotes: List([]),
   started    : false,
-  lock       : false,
-  lightingBtn: false,
+  isLocked       : false,
+  highlightingButtonId: false,
   strict     : false
 });
 
@@ -30,25 +30,24 @@ export default (game = defaultState, action) => {
   const {type, payload} = action;
   switch (type) {
     case LOCK:
-      return game.set('lock', true);
+      return game.set('isLocked', true);
 
     case UNLOCK:
-      console.log('unlock from UNLOCK');
-      return game.set('lock', false);
+      return game.set('isLocked', false);
 
     case SWITCH_ON:
-      return defaultState.set('switchOff', false).set('lock', false);
+      return defaultState.set('isSwitchedOff', false).set('isLocked', false);
 
     case SWITCH_OFF:
-      return defaultState.set('switchOff', true).set('lock', true);
+      return defaultState.set('isSwitchedOff', true).set('isLocked', true);
 
     case START_GAME:
       const strict     = game.get('strict');
-      let addNoteState = addNote(defaultState.set('started', true).set('strict', strict)).set('switchOff', false).set('notesCount',1);
+      let addNoteState = addNote(defaultState.set('started', true).set('strict', strict)).set('isSwitchedOff', false).set('notesCount',1);
       return addNoteState;
 
     case PLAY_NOTE:
-      return game.set('lightingBtn', payload);
+      return game.set('highlightingButtonId', payload);
 
     case NEXT_TURN:
       let newState = nextTurn(game);
@@ -60,13 +59,12 @@ export default (game = defaultState, action) => {
       return game.set('currentStep', step);
 
     case  SWITCH_OFF_LIGHT:
-      return game.set('lightingBtn', false);
+      return game.set('highlightingButtonId', false);
 
     case WRONG_NOTE:
       let errorState;
       if (game.get('strict')) {
-        errorState = addNote(defaultState.set('notesCount',1).set('lightingBtn', payload).set('started', true).set('strict', true).set('lock', true).set('switchOff', false));
-          console.log('набор нот после ошибки:',errorState.get('randomNotes'));     
+        errorState = addNote(defaultState.set('notesCount',1).set('highlightingButtonId', payload).set('started', true).set('strict', true).set('isLocked', true).set('isSwitchedOff', false));
       }
       else {
         errorState = game.set('currentStep', 0);
@@ -82,7 +80,7 @@ export default (game = defaultState, action) => {
 function nextTurn(state) {
   const plusCountState = state.set('notesCount', state.get('notesCount') + 1).set('currentStep', 0);
   if (plusCountState.get('notesCount') === 6) {
-    return defaultState.set('notesCount', 'win').set('switchOff', false).set('lock', true);
+    return defaultState.set('notesCount', 'win').set('isSwitchedOff', false).set('isLocked', true);
   }
   const addNoteState = addNote(plusCountState);
   return addNoteState

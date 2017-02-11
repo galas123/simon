@@ -11,14 +11,14 @@ class clickStartBtn extends Component {
     return (
       <button 
         className="control-btn start"
-        onClick={this.clickBtn}
+        onClick={this.onClick}
       >
         START
       </button>
     );
   }
 
-  clickBtn = (ev) => {
+  onClick = (ev) => {
     const {startGame}=this.props;
     ev.preventDefault();
     startGame();

@@ -9,29 +9,29 @@ import {clickNote} from '../AC/clickNote';
 class clickNoteBtn extends Component {
 
   render() {
-    const {id, lightingBtn, switchOff, started} = this.props;
+    const {id, highlightingButtonId, isSwitchedOff, started} = this.props;
     return (
       <button
-        className={cx(`sector sector${id}`,{'sector--selected':Number(id)===Number(lightingBtn)}, 
-        {'switch-off': switchOff}, {'enactive':!started})}
-        onClick={this.clickBtn}
+        className={cx(`sector sector${id}`,{'sector--selected':Number(id)===Number(highlightingButtonId)}, 
+        {'switch-off': isSwitchedOff}, {'enactive':!started})}
+        onClick={this.onClick}
       />
     );
   }
 
-  clickBtn = (ev) => {
-    const {clickNote, id, lock}=this.props;
+  onClick = (ev) => {
+    const {clickNote, id, isLocked}=this.props;
     ev.preventDefault();
-    if (!lock) {
+    if (!isLocked) {
       clickNote(id);
     }
   }
 }
 
 const mapStateToProps = state=>({
-  lock       : state.game.get('lock'),
-  lightingBtn: state.game.get('lightingBtn'),
-  switchOff  : state.game.get('switchOff'),
+  isLocked       : state.game.get('isLocked'),
+  highlightingButtonId: state.game.get('highlightingButtonId'),
+  isSwitchedOff  : state.game.get('isSwitchedOff'),
   started    : state.game.get('started')
 });
 

@@ -12,7 +12,6 @@ export const clickNote = (note) => {
     const currentStep     = state.get('currentStep');
     const nextCorrectNote = Number(state.getIn(['randomNotes', currentStep]));
     const isWrongNote=nextCorrectNote !== Number(note);
-    console.log('isWrongNote', isWrongNote);
     dispatch(
       {
         type   : PLAY_NOTE,

@@ -8,7 +8,7 @@ import {switchOff} from '../AC/switchOff';
 
 import '../App.css';
 
-class clickSwitchOnOff extends Component {
+class switchOnOff extends Component {
   render() {
     return (
       <div className="switch-on-off">
@@ -28,4 +28,4 @@ class clickSwitchOnOff extends Component {
   }
 }
 
-export default connect(null, {switchOn, switchOff })(clickSwitchOnOff);
+export default connect(null, {switchOn, switchOff })(switchOnOff);

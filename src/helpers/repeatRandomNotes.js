@@ -2,10 +2,10 @@ import {PLAY_NOTE,UNLOCK} from '../constants'
 
 export default (state, dispatch) => {
     let i = 0;
-    play();
+    playNextNote();
   
-    function play() {
-      const promise = new Promise((resolve, reject) => {
+    function playNextNote() {
+      const resolveNote = new Promise((resolve, reject) => {
         if (i === state.get('randomNotes').size) {
           dispatch(
             {
@@ -19,8 +19,8 @@ export default (state, dispatch) => {
           setTimeout(() => resolve(note), 500);
         }
       });
-      
-      promise
+
+      resolveNote
         .then(
           note => {
             dispatch(
@@ -31,7 +31,7 @@ export default (state, dispatch) => {
               }
             );
             i++;
-            play();
+            playNextNote();
           },
           error => console.log('error =>', error)
         )
